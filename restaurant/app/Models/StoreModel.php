@@ -10,9 +10,7 @@ class StoreModel extends Model {
     protected $allowedFields = ['store_num', 'u_num','s_name','address','tag','s_phone'];
 
 
-    
-
-
+    //맛집리스트 가져오기
     public function getList(){
         $db = \Config\Database::connect("default");
         $query = $db->query('select s.store_num, s.s_name,s.address,t.tag, s. s_phone,ms.m_classification

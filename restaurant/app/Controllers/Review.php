@@ -2,7 +2,7 @@
 
 class Review extends \CodeIgniter\Controller
 {
-	public function writeOK()
+	public function write()
 	{
 		return view('review/write');
 	}

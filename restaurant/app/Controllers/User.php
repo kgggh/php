@@ -4,11 +4,13 @@ use App\Models\UserModel;
 class User extends BaseController
 {
 
+	//로그인
 	public function index()
 	{
 		$data = [];
 		helper(['form']);
 
+		//유효성검사
 		if($this->request->getMethod() == 'post'){
 			$rules = [
 				'userId' => 'required|min_length[5]|max_length[12]',
@@ -21,11 +23,13 @@ class User extends BaseController
 				]
 			];
 
+
 			if(! $this->validate($rules)){
 				$data['validation']=$this->validator;
 			}else{
 				$model = new UserModel();
 
+				//세션저장
 				$user = $model ->where('userId', $this->request->getVar('userId'))
 						->first();
 				
@@ -38,6 +42,7 @@ class User extends BaseController
 		echo view('login');
 	}
 
+	//로그인시 세션저장
 	private function setUserSession($user){
 		$data = [
 			'user_num' => $user['user_num'],
@@ -52,11 +57,13 @@ class User extends BaseController
 		return true;
 	}
 
+	//회원가입
 	public function register()
 	{
 		$data = [];
 		helper(['form']);
 
+		//유효성 검사
 		if($this->request->getMethod() == 'post'){
 			$rules = [
 				'userId' => 'required|min_length[5]|max_length[12]',
@@ -78,20 +85,8 @@ class User extends BaseController
 		echo view('register');
 	}
 
-	
 
-	private function exists($id,$password) 
-	{
-			$model = new UserModel();
-			$user=$model->where('userId',$userId)->first();
-			if($user!= NULL)
-			{
-				if (password_verify($password,$user['password'])) {
-					return $user;
-				}
-			}
-	}
-
+	//유저 정보수정
 	public function profile(){
 		$data = [];
 		helper(['form']);
@@ -118,6 +113,7 @@ class User extends BaseController
 					'name' => $this -> request->getPost('name'),
 					'classification' => $this -> request->getPost('classification'),
 				];
+				
 				if($this->request->getPost('password') !=''){
 					$newData['password'] = $this->request->getPost('password');
 				}
@@ -130,6 +126,8 @@ class User extends BaseController
 		echo view('templates/header',$data);
 		echo view('profile');
 	}
+	
+	//로그아웃
 	public function logout(){
 		session()->destroy();
 		return redirect()->to('/');
